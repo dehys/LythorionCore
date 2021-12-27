@@ -1,0 +1,5 @@
+bot-token: "YOUR_BOT_TOKEN"
+guild-id: "YOUR_GUILD_ID"
+channel-id: "YOUR_CHANNEL_ID"
+webhook-url: "YOUR_WEBHOOK_URL"
+discord-prefix: "m!"

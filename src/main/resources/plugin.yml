@@ -1,0 +1,19 @@
+name: LythorionCore
+version: '${project.version}'
+main: com.dehys.lythorioncore.Main
+api-version: 1.18
+prefix: Lythorion
+authors: [ dehys ]
+description: The official lythorion core
+website: https://lythorion.com
+commands:
+  nick:
+    usage: /nick <nickname>
+    description: Change your nickname
+    aliases: [nickname]
+    permission: lythorion.nick
+  showitem:
+    usage: /showitem <item>
+    description: Show your item in chat
+    aliases: [si]
+    permission: lythorion.showitem
