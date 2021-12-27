@@ -2,6 +2,7 @@ package com.dehys.lythorioncore;
 
 import com.dehys.lythorioncore.bukkit.commands.NickCommand;
 import com.dehys.lythorioncore.bukkit.commands.ShowItemCommand;
+import com.dehys.lythorioncore.bukkit.commands.StaffChatCommand;
 import com.dehys.lythorioncore.bukkit.listeners.*;
 import com.dehys.lythorioncore.jda.Bot;
 import com.dehys.lythorioncore.jda.commands.JDACommand;
@@ -30,6 +31,7 @@ public class Hook {
         //Bukkit
         Objects.requireNonNull(plugin.getCommand("nick")).setExecutor(new NickCommand());
         Objects.requireNonNull(plugin.getCommand("showitem")).setExecutor(new ShowItemCommand());
+        Objects.requireNonNull(plugin.getCommand("staffchat")).setExecutor(new StaffChatCommand());
 
         //JDA //TODO: store commands in a list and register them all
         bot.registerCommands(new RestartCommand());
@@ -40,6 +42,7 @@ public class Hook {
     public void unhookCommands(){
         Objects.requireNonNull(plugin.getCommand("nick")).setExecutor(null);
         Objects.requireNonNull(plugin.getCommand("showitem")).setExecutor(null);
+        Objects.requireNonNull(plugin.getCommand("staffchat")).setExecutor(null);
 
         for (JDACommand command : bot.getCommands()) {
             bot.unregisterCommand(command);

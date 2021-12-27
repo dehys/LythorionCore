@@ -16,12 +16,7 @@ import java.util.Objects;
 public class BukkitChatListener implements Listener {
     public BukkitChatListener(){}
 
-    public BukkitChatListener(Member member, String message){
-        if (member != null){
-            String hexColor = "&#"+Integer.toHexString(Objects.requireNonNull(member.getColor()).getRGB()).substring(2);
-            Main.getPlugin.getServer().broadcastMessage(ChatColor.BLUE+"[D] "+ NickCommand.colorize(hexColor)+member.getEffectiveName()+": "+ChatColor.WHITE+message);
-        }
-    }
+
 
     @EventHandler
     public void onPlayerChatEvent(AsyncPlayerChatEvent event){
