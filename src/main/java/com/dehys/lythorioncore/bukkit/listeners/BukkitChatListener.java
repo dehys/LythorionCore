@@ -1,7 +1,10 @@
 package com.dehys.lythorioncore.bukkit.listeners;
 
+import com.dehys.lythorioncore.Channel;
 import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.bukkit.MessageUtil;
 import com.dehys.lythorioncore.bukkit.commands.NickCommand;
+import com.dehys.lythorioncore.factories.StorageFactory;
 import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
 import net.dv8tion.jda.api.entities.Member;
 import org.bukkit.Bukkit;
@@ -20,9 +23,11 @@ public class BukkitChatListener implements Listener {
 
     @EventHandler
     public void onPlayerChatEvent(AsyncPlayerChatEvent event){
-        event.setCancelled(true);
-        Bukkit.broadcastMessage(ChatColor.GRAY+event.getPlayer().getDisplayName()+": "+ChatColor.WHITE+event.getMessage());
-
+        if(StorageFactory.staffChat.contains(event.getPlayer().getUniqueId())) {
+            event.setCancelled(true);
+            MessageUtil.broadcastMessage(Channel.STAFF, event.getPlayer(), event.getMessage());
+        }
+        event.setFormat(ChatColor.GRAY+event.getPlayer().getDisplayName()+": "+ChatColor.WHITE+event.getMessage());
         new DiscordChatListener(DiscordChatListener.ChatType.CHAT, event.getPlayer(), event.getMessage());
     }
 }
