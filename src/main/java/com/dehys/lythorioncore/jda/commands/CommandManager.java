@@ -22,11 +22,7 @@ public class CommandManager extends ListenerAdapter {
     }
 
     public void removeCommand(String commandName){
-        commands.forEach((command) -> {
-            if(command.getName().equalsIgnoreCase(commandName)){
-                commands.remove(command);
-            }
-        });
+        commands.stream().filter(command -> command.getName().equalsIgnoreCase(commandName)).forEach(commands::remove);
     }
 
     public void removeCommand(JDACommand command){
@@ -38,12 +34,7 @@ public class CommandManager extends ListenerAdapter {
     }
 
     private JDACommand getCommand(String name){
-        name = name.toLowerCase();
-        for (JDACommand commandX : commands) {
-            if(commandX.getName().equalsIgnoreCase(name)) return commandX;
-            if(commandX.getAlias().contains(name)) return commandX;
-        }
-        return null;
+        return commands.stream().filter(command -> command.getName().equalsIgnoreCase(name) || command.getAlias().contains(name.toLowerCase())).findFirst().orElse(null);
     }
 
     @Override
