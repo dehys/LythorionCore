@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.logging.Level;
 
 public class MessageUtil {
 
@@ -23,6 +24,7 @@ public class MessageUtil {
     }
 
     public static void broadcastMessage(@NotNull Channel channel, @NotNull Player sender, @NotNull String message) {
+        Main.getPlugin.getLogger().log(Level.INFO, "Player " + sender.getName() + " sent message: \"" + message + "\" in Channel " + channel.name());
         switch (channel) {
             case STAFF -> Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("lythorion.staffchat")).forEach(player ->
                     player.sendMessage("§7[§cStaff§7] " + sender.getDisplayName() + "§8: §f" + message));
