@@ -1,6 +1,8 @@
 package com.dehys.lythorioncore.jda.listeners;
 
+import com.dehys.lythorioncore.Channel;
 import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.bukkit.MessageUtil;
 import com.dehys.lythorioncore.bukkit.listeners.BukkitChatListener;
 import com.dehys.lythorioncore.factories.StorageFactory;
 import com.dehys.lythorioncore.jda.Bot;
@@ -151,7 +153,7 @@ public class DiscordChatListener extends ListenerAdapter {
                 return;
             }
 
-            new BukkitChatListener(event.getMember(), event.getMessage().getContentRaw());
+            MessageUtil.broadcastDiscordMessage(Channel.GLOBAL, event.getMember(), event.getMessage().getContentRaw());
         }
     }
 
