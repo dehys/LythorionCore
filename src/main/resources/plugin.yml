@@ -17,3 +17,13 @@ commands:
     description: Show your item in chat
     aliases: [si]
     permission: lythorion.showitem
+permissions:
+  lythorion.admin:
+    description: Grants full access to the plugin's features
+    children:
+      - lythorion.nick
+      - lythorion.showitem
+  lythorion.nick:
+    description: Allows the player to change their nickname
+  lythorion.showitem:
+    description: Allows the player to show items in chat
