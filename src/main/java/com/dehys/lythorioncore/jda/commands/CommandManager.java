@@ -75,7 +75,7 @@ public class CommandManager extends ListenerAdapter {
     public JDACommand getValidCommand(User user, Message message) {
         if(user.isBot()) return null;
         String prefix = StorageFactory.DISCORD_PREFIX;
-        if(!message.getContentRaw().startsWith(prefix)){
+        if (!message.getContentRaw().startsWith(prefix)) {
             return null;
         }
         String[] split = message.getContentRaw()
@@ -84,11 +84,19 @@ public class CommandManager extends ListenerAdapter {
         return getCommand(split[0]);
     }
 
-    public void addAdminOverride(long id){
+    public static boolean isCommand(String s) {
+        if (s.startsWith(StorageFactory.DISCORD_PREFIX)) {
+            String ss = s.replaceFirst("(?i)" + Pattern.quote(StorageFactory.DISCORD_PREFIX), "");
+            return commands.stream().anyMatch(command -> command.getAlias().contains(ss.split("\\s+")[0].toLowerCase()) || command.getName().equalsIgnoreCase(ss.split("\\s+")[0].toLowerCase()));
+        }
+        return false;
+    }
+
+    public void addAdminOverride(long id) {
         adminOverrides.add(id);
     }
 
-    public void removeAdminOverride(long id){
+    public void removeAdminOverride(long id) {
         adminOverrides.remove(id);
     }
 }

@@ -1,8 +1,9 @@
 package com.dehys.lythorioncore.jda.commands.moderation;
 
-import com.dehys.lythorioncore.jda.commands.JDACommand;
+import com.dehys.lythorioncore.Channel;
+import com.dehys.lythorioncore.MessageUtil;
 import com.dehys.lythorioncore.jda.commands.CommandInformation;
-import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
+import com.dehys.lythorioncore.jda.commands.JDACommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bukkit.Bukkit;
@@ -44,7 +45,7 @@ public class RestartCommand implements JDACommand {
     }
 
     private void execute(GuildMessageReceivedEvent event){
-        new DiscordChatListener(DiscordChatListener.ChatType.PLAYER_ADVANCEMENT, null, "Restarting Server...");
+        MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_BLUE, Channel.GLOBAL, "Restarting Server...");
         Bukkit.getServer().shutdown();
     }
 }

@@ -1,17 +1,14 @@
 package com.dehys.lythorioncore.bukkit.commands;
 
 import com.dehys.lythorioncore.Channel;
-import com.dehys.lythorioncore.bukkit.MessageUtil;
+import com.dehys.lythorioncore.MessageUtil;
 import com.dehys.lythorioncore.factories.StorageFactory;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 public class StaffChatCommand implements CommandExecutor {
 
@@ -40,7 +37,7 @@ public class StaffChatCommand implements CommandExecutor {
         }
 
         String message = String.join(" ", args);
-        MessageUtil.broadcastMessage(Channel.STAFF, player, message);
+        MessageUtil.sendMinecraftMessage(Channel.STAFF, player, message);
 
 
         return true;

@@ -3,9 +3,7 @@ package com.dehys.lythorioncore;
 import com.dehys.lythorioncore.factories.MessageFactory;
 import com.dehys.lythorioncore.factories.StorageFactory;
 import com.dehys.lythorioncore.jda.Bot;
-
 import com.dehys.lythorioncore.jda.features.DescriptionUpdate;
-import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,25 +22,37 @@ public final class Main extends JavaPlugin {
         //initialize objects
         getPlugin = this;
         discordBot = new Bot(StorageFactory.BOT_TOKEN);
-        hook = new Hook(this, discordBot);
 
-        //register event handlers and commands
-        hook.hookListeners();
-        hook.hookCommands();
+        if (Bot.jda != null) {
+            hook = new Hook(this, discordBot);
 
-        //send message to discord
-        new DiscordChatListener(DiscordChatListener.ChatType.PLAYER_JOIN, null, "Server started");
-        //create new instance of DescriptionUpdate
-        new DescriptionUpdate();
+            //register event handlers and commands
+            hook.hookListeners();
+            hook.hookCommands();
+
+            //run features
+            DescriptionUpdate.run();
+
+            //send message to discord
+            MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_GREEN, Channel.GLOBAL, null, MessageFactory.SERVER_START.getMessage());
+        }
     }
 
     @Override
     public void onDisable() {
 
-        //unhook event handlers and commands
-        hook.unhookListeners();
-        hook.unhookCommands();
 
+        //unhook event handlers and commands
+        if (hook != null) {
+            hook.unhookListeners();
+            hook.unhookCommands();
+        }
+
+        //shutdown discord bot and send message to discord
+        if (Bot.jda != null) {
+            MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_RED, Channel.GLOBAL, null, MessageFactory.SERVER_STOP.getMessage());
+            discordBot.shutdown();
+        }
     }
 
     //unloads the plugin from the server

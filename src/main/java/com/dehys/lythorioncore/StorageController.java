@@ -1,7 +1,6 @@
 package com.dehys.lythorioncore;
 
 import com.dehys.lythorioncore.factories.StorageFactory;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,13 +52,13 @@ public class StorageController {
         }
 
         if (deleteDirectory(defaultsFolder)) {
-            Bukkit.getLogger().log(Level.INFO, "Default files deleted, everything is fine.");
+            plugin.getLogger().log(Level.INFO, "Default files deleted, everything is fine.");
         }
 
         initializeValues();
     }
 
-    private static void initializeValues(){
+    private static void initializeValues() {
         StorageFactory.configuration = configuration;
         StorageFactory.claims = claims;
 
@@ -67,7 +66,11 @@ public class StorageController {
         StorageFactory.GUILD_ID = configuration.getString("guild-id");
         StorageFactory.CHANNEL_ID = configuration.getString("channel-id");
         StorageFactory.WEBHOOK_URL = configuration.getString("webhook-url");
+        StorageFactory.LOGGING_ENABLED = configuration.getBoolean("logging-enabled");
+        StorageFactory.LOG_CHANNEL_ID = configuration.getString("log-channel-id");
+        StorageFactory.LOG_WEBHOOK_URL = configuration.getString("log-webhook-url");
         StorageFactory.DISCORD_PREFIX = configuration.getString("discord-prefix");
+        StorageFactory.AVATAR_PROVIDER_URL = configuration.getString("avatar-provider-url");
     }
 
     private static boolean deleteDirectory(File directoryToBeDeleted) {
@@ -85,7 +88,7 @@ public class StorageController {
 
         InputStream in = plugin.getResource(filename);
         if (in == null) {
-            plugin.getLogger().log(Level.SEVERE, "Could not find " + filename + " in jar!");
+            plugin.getLogger().log(Level.SEVERE, "Could not find " + filename + " in jar! Report this to the developers.");
             return null;
         }
 
@@ -93,9 +96,9 @@ public class StorageController {
         Files.copy(in, defFile, StandardCopyOption.REPLACE_EXISTING);
         if (!defFile.toFile().exists()){
             if (defFile.toFile().createNewFile()) {
-                Bukkit.getLogger().log(Level.INFO, "Default file created with name: " + displayname + "_def");
+                plugin.getLogger().log(Level.INFO, "Default file created with name: " + displayname + "_def");
             }else {
-                Bukkit.getLogger().log(Level.SEVERE, "Could not create default file with name: " + displayname + "_def");
+                plugin.getLogger().log(Level.SEVERE, "Could not create default file with name: " + displayname + "_def");
             }
         }
 
@@ -107,7 +110,7 @@ public class StorageController {
         if (!file.exists()) {
             try {
                 if (file.createNewFile()) {
-                    Bukkit.getLogger().log(Level.INFO, "JSON file created with name: " + name);
+                    plugin.getLogger().log(Level.INFO, "JSON file created with name: " + name);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -120,7 +123,7 @@ public class StorageController {
         if (!file.exists()){
             try{
                 if (file.createNewFile()) {
-                    Bukkit.getLogger().log(Level.INFO, "YAML file created with name: " + name);
+                    plugin.getLogger().log(Level.INFO, "YAML file created with name: " + name);
                 }
             }catch (IOException e){
                 e.printStackTrace();
@@ -130,7 +133,7 @@ public class StorageController {
     }
 
     private static void createDataFolder() {
-        Bukkit.getLogger().log(Level.INFO, "Data folder created ?= " + plugin.getDataFolder().mkdir());
+        plugin.getLogger().log(Level.INFO, "Data folder created ?= " + plugin.getDataFolder().mkdir());
     }
 
     public FileConfiguration getConfiguration() {

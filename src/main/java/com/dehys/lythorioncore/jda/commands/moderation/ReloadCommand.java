@@ -1,9 +1,10 @@
 package com.dehys.lythorioncore.jda.commands.moderation;
 
+import com.dehys.lythorioncore.Channel;
 import com.dehys.lythorioncore.Main;
-import com.dehys.lythorioncore.jda.commands.JDACommand;
+import com.dehys.lythorioncore.MessageUtil;
 import com.dehys.lythorioncore.jda.commands.CommandInformation;
-import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
+import com.dehys.lythorioncore.jda.commands.JDACommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public class ReloadCommand implements JDACommand {
     }
 
     private void execute(GuildMessageReceivedEvent event){
-        new DiscordChatListener(DiscordChatListener.ChatType.PLAYER_ADVANCEMENT, null, "Reloading server...");
+        MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_BLUE, Channel.GLOBAL, "Reloading server...");
         Main.getPlugin.getServer().reload();
     }
 }

@@ -1,6 +1,7 @@
 package com.dehys.lythorioncore.bukkit.listeners;
 
-import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
+import com.dehys.lythorioncore.Channel;
+import com.dehys.lythorioncore.MessageUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -8,7 +9,7 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(org.bukkit.event.entity.PlayerDeathEvent e){
-        new DiscordChatListener(DiscordChatListener.ChatType.PLAYER_DEATH, null, e.getDeathMessage());
+        MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_RED, Channel.GLOBAL, null, e.getDeathMessage());
     }
 
 }
