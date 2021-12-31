@@ -2,50 +2,51 @@ package com.dehys.lythorioncore.jda;
 
 import com.dehys.lythorioncore.Main;
 import com.dehys.lythorioncore.factories.StorageFactory;
-import com.dehys.lythorioncore.jda.commands.JDACommand;
 import com.dehys.lythorioncore.jda.commands.CommandManager;
+import com.dehys.lythorioncore.jda.commands.JDACommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.bukkit.Bukkit;
 
 import javax.security.auth.login.LoginException;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.logging.Level;
 
 public class Bot {
     private static final CommandManager commandManager = new CommandManager();
     private final String token;
 
-    public static Guild guild;
-    public static TextChannel channel;
+    public static JDA jda = null;
 
-    private JDA jda;
-
-    public Bot(String token){
+    public Bot(String token) {
         this.token = token;
-        try {
-            initJDA();
-        } catch (LoginException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        initJDA();
     }
 
-    private void initJDA() throws LoginException, InterruptedException {
-        jda = setupJDA().build();
-        jda.awaitReady();
+    private void initJDA() {
+        try {
+            jda = setupJDA().build();
+            jda.awaitReady();
+        } catch (LoginException e) {
+            Main.getPlugin.getLogger().log(Level.SEVERE, "Bot token cannot be null! Please set it in the configuration.yml file and reload the server.");
+            Main.unload();
+            return;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        guild = jda.getGuildById(StorageFactory.GUILD_ID);
-        assert guild != null;
-        channel = guild.getTextChannelById(StorageFactory.CHANNEL_ID);
+        StorageFactory.guild = jda.getGuildById(StorageFactory.GUILD_ID);
+        if (StorageFactory.guild == null) {
+            Main.getPlugin.getLogger().log(Level.SEVERE, "Guild ID cannot be null! Please set it in the configuration.yml file and reload the server.");
+            Main.unload();
+        }
+        StorageFactory.globalChannel = StorageFactory.guild.getTextChannelById(StorageFactory.CHANNEL_ID);
+        StorageFactory.logChannel = StorageFactory.guild.getTextChannelById(StorageFactory.LOG_CHANNEL_ID);
     }
 
     private JDABuilder setupJDA(){
-        if (this.token == null){
-            Main.unload();
-            throw new IllegalArgumentException("Token cannot be null, please provide a token inside of configuration.yml");
-        }
         return JDABuilder.create(this.token, getIntents());
     }
 
@@ -59,10 +60,6 @@ public class Bot {
         );
     }
 
-    public JDA getJDA(){
-        return this.jda;
-    }
-
     public void registerCommands(JDACommand... commands){
         for (JDACommand cmd : commands) commandManager.addCommand(cmd);
     }
@@ -71,11 +68,21 @@ public class Bot {
         for (JDACommand cmd : commands) commandManager.removeCommand(cmd);
     }
 
-    public static CommandManager getCommandManager(){
+    public static CommandManager getCommandManager() {
         return commandManager;
     }
 
     public HashSet<JDACommand> getCommands() {
         return commandManager.getCommands();
+    }
+
+    public void shutdown() {
+        jda.shutdownNow();
+        Bukkit.getLogger().log(Level.INFO, "[Lythorion] Waiting for JDA to shutdown...");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

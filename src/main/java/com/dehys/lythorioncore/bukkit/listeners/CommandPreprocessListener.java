@@ -1,6 +1,7 @@
 package com.dehys.lythorioncore.bukkit.listeners;
 
-import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
+import com.dehys.lythorioncore.Channel;
+import com.dehys.lythorioncore.MessageUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -14,7 +15,7 @@ public class CommandPreprocessListener implements Listener {
         String command = event.getMessage();
         if (command.startsWith("/reload") || command.startsWith("/rl")) {
             reloading = true;
-            new DiscordChatListener(DiscordChatListener.ChatType.PLAYER_ADVANCEMENT, null, "Reloading Server...");
+            MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_BLUE, Channel.GLOBAL, null, "Reloading Server...");
         }
     }
 }

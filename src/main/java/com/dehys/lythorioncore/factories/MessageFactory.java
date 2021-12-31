@@ -1,31 +1,18 @@
 package com.dehys.lythorioncore.factories;
 
-import org.bukkit.plugin.java.JavaPlugin;
+public enum MessageFactory {
 
-public class MessageFactory {
+    SERVER_START("Server started"),
+    SERVER_STOP("Server stopped"),
+    SERVER_RELOADING("Reloading server...");
 
-    private final JavaPlugin plugin;
-    private String s1;
+    private final String message;
 
-    public MessageFactory(JavaPlugin plugin) {
-        this.plugin = plugin;
+    MessageFactory(String message) {
+        this.message = message;
     }
 
-    MessageFactory(String s1) {
-        this.plugin = null;
-        this.s1 = s1;
+    public String getMessage() {
+        return message;
     }
-
-
-    public static class lythorion {
-        static class status {
-            public static MessageFactory online = new MessageFactory("Server online");
-            public static MessageFactory offline = new MessageFactory("Server offline");
-            public static MessageFactory restarting = new MessageFactory("Server restarting");
-            public static MessageFactory restarted = new MessageFactory("Server restarted");
-            public static MessageFactory reloading = new MessageFactory("Server reloading");
-            public static MessageFactory reloaded = new MessageFactory("Server reloaded");
-        }
-    }
-
 }

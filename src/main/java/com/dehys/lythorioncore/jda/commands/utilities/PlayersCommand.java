@@ -1,8 +1,9 @@
 package com.dehys.lythorioncore.jda.commands.utilities;
 
-import com.dehys.lythorioncore.jda.commands.JDACommand;
+import com.dehys.lythorioncore.Channel;
+import com.dehys.lythorioncore.MessageUtil;
 import com.dehys.lythorioncore.jda.commands.CommandInformation;
-import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
+import com.dehys.lythorioncore.jda.commands.JDACommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bukkit.Bukkit;
@@ -51,6 +52,6 @@ public class PlayersCommand implements JDACommand {
 
         embedBuilder.setDescription(playerView.toString());
 
-        new DiscordChatListener().sendMessage(embedBuilder.build());
+        MessageUtil.sendDiscordMessage(Channel.GLOBAL, embedBuilder.build());
     }
 }
