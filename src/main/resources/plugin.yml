@@ -7,21 +7,35 @@ authors: [ dehys ]
 description: The official lythorion core
 website: https://lythorion.com
 commands:
+  reload:
+    usage: /reload
+    description: Reloads the server
+    aliases: [ rl ]
+    permission: lythorion.reload
+  restart:
+    usage: /restart
+    description: Restarts the server
+    aliases: [ stop ]
+    permission: lythorion.restart
+  staffchat:
+    usage: /staffchat [<message> / toggle]
+    description: Send a message to the staffchat or toggle it
+    aliases: [ sc, staff ]
+    permission: lythorion.staffchat
+  claim:
+    usage: /claim <not implemented yet>
+    description: Claim a chunk
+    permission: lythorion.claim
   nick:
     usage: /nick <nickname>
     description: Change your nickname
-    aliases: [nickname]
+    aliases: [ nickname ]
     permission: lythorion.nick
   showitem:
     usage: /showitem <item>
     description: Show your item in chat
-    aliases: [si]
+    aliases: [ si ]
     permission: lythorion.showitem
-  staffchat:
-    usage: /staffchat [<message> / toggle]
-    description: Send a message to the staffchat or toggle it
-    aliases: [sc, staff]
-    permission: lythorion.staffchat
 permissions:
   lythorion.admin:
     description: Grants full access to the plugin's features

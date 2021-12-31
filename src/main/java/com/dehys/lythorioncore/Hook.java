@@ -1,72 +1,65 @@
 package com.dehys.lythorioncore;
 
-import com.dehys.lythorioncore.bukkit.commands.NickCommand;
-import com.dehys.lythorioncore.bukkit.commands.ShowItemCommand;
-import com.dehys.lythorioncore.bukkit.commands.StaffChatCommand;
-import com.dehys.lythorioncore.bukkit.listeners.*;
-import com.dehys.lythorioncore.jda.Bot;
-import com.dehys.lythorioncore.jda.commands.JDACommand;
-import com.dehys.lythorioncore.jda.commands.moderation.ReloadCommand;
-import com.dehys.lythorioncore.jda.commands.moderation.RestartCommand;
-import com.dehys.lythorioncore.jda.commands.utilities.PlayersCommand;
-import com.dehys.lythorioncore.jda.listeners.DiscordChatListener;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import com.dehys.lythorioncore.command.EmptyCommandExecutor;
+import com.dehys.lythorioncore.command.moderation.ReloadCommand;
+import com.dehys.lythorioncore.command.moderation.RestartCommand;
+import com.dehys.lythorioncore.command.moderation.StaffChatCommand;
+import com.dehys.lythorioncore.command.normal.ClaimCommand;
+import com.dehys.lythorioncore.command.normal.NickCommand;
+import com.dehys.lythorioncore.command.normal.PlayersCommand;
+import com.dehys.lythorioncore.command.normal.ShowItemCommand;
+import com.dehys.lythorioncore.factory.StorageFactory;
+import com.dehys.lythorioncore.listener.bukkit.*;
+import com.dehys.lythorioncore.listener.discord.DiscordChatListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Hook {
 
     private final JavaPlugin plugin;
-    private final Bot bot;
 
-    public Hook(JavaPlugin plguin, Bot bot){
+    public Hook(JavaPlugin plguin) {
         this.plugin = plguin;
-        this.bot = bot;
     }
 
-    public void hookCommands(){
+    public void hookCommands() {
         if (Bot.jda == null) return;
 
-        //Bukkit
-        Objects.requireNonNull(plugin.getCommand("nick")).setExecutor(new NickCommand());
-        Objects.requireNonNull(plugin.getCommand("showitem")).setExecutor(new ShowItemCommand());
-        Objects.requireNonNull(plugin.getCommand("staffchat")).setExecutor(new StaffChatCommand());
+        //Bukkit roll-around
+        EmptyCommandExecutor emptyCommandExecutor = new EmptyCommandExecutor();
+        Objects.requireNonNull(plugin.getCommand("reload")).setExecutor(emptyCommandExecutor);
+        Objects.requireNonNull(plugin.getCommand("restart")).setExecutor(emptyCommandExecutor);
+        Objects.requireNonNull(plugin.getCommand("staffchat")).setExecutor(emptyCommandExecutor);
+        Objects.requireNonNull(plugin.getCommand("claim")).setExecutor(emptyCommandExecutor);
+        Objects.requireNonNull(plugin.getCommand("nick")).setExecutor(emptyCommandExecutor);
+        Objects.requireNonNull(plugin.getCommand("showitem")).setExecutor(emptyCommandExecutor);
 
-        //JDA //TODO: store commands in a list and register them all
-        bot.registerCommands(new RestartCommand());
-        bot.registerCommands(new ReloadCommand());
-        bot.registerCommands(new PlayersCommand());
-    }
+        //NON-SLASH SUPPORTIVE COMMANDS
+        new StaffChatCommand();
+        new ClaimCommand();
+        new ShowItemCommand();
 
-    public void unhookCommands() {
-        if (Bot.jda == null) return;
-
-        Objects.requireNonNull(plugin.getCommand("nick")).setExecutor(null);
-        Objects.requireNonNull(plugin.getCommand("showitem")).setExecutor(null);
-        Objects.requireNonNull(plugin.getCommand("staffchat")).setExecutor(null);
-
-        for (JDACommand command : bot.getCommands()) {
-            bot.unregisterCommand(command);
-        }
-    }
-
-    public void unhookCommand(String s1) {
-        if (Bot.jda == null) return;
-
-        Objects.requireNonNull(plugin.getCommand(s1)).setExecutor(null);
-    }
-
-    public void unhookCommand(JDACommand command) {
-        if (Bot.jda == null) return;
-
-        bot.unregisterCommand(command);
+        //SLASH SUPPORTIVE COMMANDS
+        StorageFactory.guild.updateCommands().addCommands(Stream.of(
+                new ReloadCommand().getCommandData(),
+                new RestartCommand().getCommandData(),
+                new NickCommand().getCommandData(),
+                new PlayersCommand().getCommandData()
+        ).flatMap(Collection::stream).collect(Collectors.toList())).complete();
     }
 
     public void hookListeners() {
         if (Bot.jda == null) return;
+
+        //CommandHandler
+        /*  Bukkit  */
+        plugin.getServer().getPluginManager().registerEvents(Main.getCommandHandler, plugin);
+        /*  JDA     */
+        Bot.jda.addEventListener(Main.getCommandHandler);
 
         //Bukkit
         plugin.getServer().getPluginManager().registerEvents(new BukkitChatListener(), plugin);
@@ -75,34 +68,9 @@ public class Hook {
         plugin.getServer().getPluginManager().registerEvents(new PlayerDeathListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new PlayerAdvanceListener(), plugin);
         plugin.getServer().getPluginManager().registerEvents(new PlayerRenameItemListener(), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new CommandPreprocessListener(), plugin);
+
 
         //JDA
-        Bot.jda.addEventListener(Bot.getCommandManager());
         Bot.jda.addEventListener(new DiscordChatListener());
     }
-
-    public void unhookListeners() {
-        if (Bot.jda == null) return;
-
-        //Bukkit
-        HandlerList.unregisterAll(plugin);
-
-        //JDA //TODO: store listeners in a list and unregister them all
-        Bot.jda.removeEventListener(Bot.getCommandManager());
-        Bot.jda.removeEventListener(new DiscordChatListener());
-    }
-
-    public void unhookListener(Listener listener) {
-        if (Bot.jda == null) return;
-
-        HandlerList.unregisterAll(listener);
-    }
-
-    public void unhookListener(ListenerAdapter listener) {
-        if (Bot.jda == null) return;
-
-        Bot.jda.removeEventListener(listener);
-    }
-
 }

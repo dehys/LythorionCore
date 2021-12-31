@@ -1,12 +1,12 @@
 package com.dehys.lythorioncore;
 
-import com.dehys.lythorioncore.bukkit.commands.NickCommand;
-import com.dehys.lythorioncore.bukkit.commands.ShowItemCommand;
-import com.dehys.lythorioncore.bukkit.listeners.PlayerAdvanceListener;
-import com.dehys.lythorioncore.bukkit.listeners.PlayerDeathListener;
-import com.dehys.lythorioncore.bukkit.listeners.PlayerJoinListener;
-import com.dehys.lythorioncore.bukkit.listeners.PlayerLeaveListener;
-import com.dehys.lythorioncore.factories.StorageFactory;
+import com.dehys.lythorioncore.command.normal.NickCommand;
+import com.dehys.lythorioncore.command.normal.ShowItemCommand;
+import com.dehys.lythorioncore.factory.StorageFactory;
+import com.dehys.lythorioncore.listener.bukkit.PlayerAdvanceListener;
+import com.dehys.lythorioncore.listener.bukkit.PlayerDeathListener;
+import com.dehys.lythorioncore.listener.bukkit.PlayerJoinListener;
+import com.dehys.lythorioncore.listener.bukkit.PlayerLeaveListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -63,9 +63,9 @@ public class MessageUtil {
 
     public static void sendDiscordMessage(Channel channel, MessageEmbed message) {
         switch (channel) {
-            case GLOBAL -> StorageFactory.globalChannel.sendMessage(message).complete();
+            case GLOBAL -> StorageFactory.globalChannel.sendMessageEmbeds(message).complete();
             case STAFF -> {
-                if (StorageFactory.LOGGING_ENABLED) StorageFactory.logChannel.sendMessage(message).complete();
+                if (StorageFactory.LOGGING_ENABLED) StorageFactory.logChannel.sendMessageEmbeds(message).complete();
             }
         }
     }
@@ -135,7 +135,7 @@ public class MessageUtil {
         eb.setColor(EmbedStyle.getColor(Class.forName(Thread.currentThread().getStackTrace()[2].getClassName())));
         eb.setFooter((player != null ? ChatColor.stripColor(player.getDisplayName()) + " " : "") + content + advancement, (player != null ? StorageFactory.AVATAR_PROVIDER_URL + player.getUniqueId() + "?size=128&overlay=true" : "https://i.imgur.com/ahJ2DJ8.png"));
 
-        sendDiscordMessage(channel, new MessageBuilder().setEmbed(eb.build()).build());
+        sendDiscordMessage(channel, new MessageBuilder().setEmbeds(eb.build()).build());
         reset();
     }
 
@@ -146,7 +146,7 @@ public class MessageUtil {
         eb.setColor(style.getColor());
         eb.setFooter((player != null ? ChatColor.stripColor(player.getDisplayName()) + " " : "") + content + advancement, (player != null ? StorageFactory.AVATAR_PROVIDER_URL + player.getUniqueId() + "?size=128&overlay=true" : "https://i.imgur.com/ahJ2DJ8.png"));
 
-        sendDiscordMessage(channel, new MessageBuilder().setEmbed(eb.build()).build());
+        sendDiscordMessage(channel, new MessageBuilder().setEmbeds(eb.build()).build());
         reset();
     }
 

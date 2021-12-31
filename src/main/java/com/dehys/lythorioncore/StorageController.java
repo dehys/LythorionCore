@@ -1,6 +1,6 @@
 package com.dehys.lythorioncore;
 
-import com.dehys.lythorioncore.factories.StorageFactory;
+import com.dehys.lythorioncore.factory.StorageFactory;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
