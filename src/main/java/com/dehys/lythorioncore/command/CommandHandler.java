@@ -1,6 +1,7 @@
 package com.dehys.lythorioncore.command;
 
 import com.dehys.lythorioncore.factory.StorageFactory;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -44,13 +45,9 @@ public class CommandHandler extends ListenerAdapter implements Listener {
         GenericCommand command = getValidCommand(event.getAuthor(), event.getMessage().getContentRaw());
         if (command == null) return;
 
+        //Check permissions
         if (event.isFromType(ChannelType.TEXT)) {
-            Collection<GenericPermission> permissions = command.getRequiredPermissions();
-            permissions.forEach(permission -> {
-                if (permission)
-            });
-
-            if (!(Objects.requireNonNull(event.getMember()).hasPermission(command.getRequiredDiscordPermissions()))) {
+            if (!this.getPermissions(CommandCaller.DISCORD_TEXT, command).stream().allMatch(p -> Objects.requireNonNull(event.getMember()).hasPermission((Permission) p))) {
                 event.getChannel().sendMessage("You do not have permission to use this command.").complete();
                 return;
             }
@@ -67,7 +64,12 @@ public class CommandHandler extends ListenerAdapter implements Listener {
         GenericCommand command = getValidCommand(event.getUser(), event.getName());
         if (command == null) return;
 
-        System.out.println("A VALID COMMAND WAS FOUND AND RAN BY A DISCORD SLASH COMMAND");
+        if (event.getChannelType() == ChannelType.TEXT) {
+            if (!this.getPermissions(CommandCaller.DISCORD_SLASH, command).stream().allMatch(p -> Objects.requireNonNull(event.getMember()).hasPermission((Permission) p))) {
+                event.getChannel().sendMessage("You do not have permission to use this command.").complete();
+                return;
+            }
+        }
 
         command.execute(new CommandInformation(CommandCaller.DISCORD_SLASH.setEventObject(event)));
     }
@@ -86,6 +88,27 @@ public class CommandHandler extends ListenerAdapter implements Listener {
         if (command == null) return;
 
         command.execute(new CommandInformation(CommandCaller.MINECRAFT_CONSOLE.setEventObject(event)));
+    }
+
+    public Collection<Object> getPermissions(CommandCaller caller, GenericCommand command){
+        Collection<Object> requiredPermissions = new ArrayList<>();
+        if (caller == CommandCaller.DISCORD_TEXT || caller == CommandCaller.DISCORD_SLASH) {
+            for (GenericPermission p : command.getRequiredPermissions()) {
+                if (!p.isBukkit()){
+                    requiredPermissions.add(GenericPermission.getAsDiscordPermission(p));
+                }
+            }
+            return requiredPermissions;
+        }else if (caller == CommandCaller.MINECRAFT_PLAYER || caller == CommandCaller.MINECRAFT_CONSOLE) {
+            for (GenericPermission p : command.getRequiredPermissions()) {
+                if (p.isBukkit()){
+                    requiredPermissions.add(GenericPermission.getAsBukkitPermission(p));
+                }
+            }
+        }else {
+            return null;
+        }
+        return requiredPermissions;
     }
 
     public GenericCommand getValidCommand(User user, String s) {
