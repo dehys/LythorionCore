@@ -8,12 +8,19 @@ import com.dehys.lythorioncore.command.normal.ClaimCommand;
 import com.dehys.lythorioncore.command.normal.NickCommand;
 import com.dehys.lythorioncore.command.normal.PlayersCommand;
 import com.dehys.lythorioncore.command.normal.ShowItemCommand;
-import com.dehys.lythorioncore.factory.StorageFactory;
 import com.dehys.lythorioncore.listener.bukkit.*;
 import com.dehys.lythorioncore.listener.discord.DiscordChatListener;
+import net.dv8tion.jda.api.entities.Guild;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,7 +51,8 @@ public class Hook {
         new ShowItemCommand();
 
         //SLASH SUPPORTIVE COMMANDS
-        StorageFactory.guild.updateCommands().addCommands(Stream.of(
+        Guild guild = Main.getBot.getGuild();
+        guild.updateCommands().addCommands(Stream.of(
                 new ReloadCommand().getCommandData(),
                 new RestartCommand().getCommandData(),
                 new NickCommand().getCommandData(),
@@ -72,5 +80,22 @@ public class Hook {
 
         //JDA
         Bot.jda.addEventListener(new DiscordChatListener());
+    }
+
+    public static Map<String, Command> getKnownCommands() {
+        SimplePluginManager spm = (SimplePluginManager) Bukkit.getPluginManager();
+
+        try {
+            Field commandMap = SimplePluginManager.class.getDeclaredField("commandMap");
+            Field knownCommands = SimpleCommandMap.class.getDeclaredField("knownCommands");
+
+            commandMap.setAccessible(true);
+            knownCommands.setAccessible(true);
+
+            return (Map<String, Command>) knownCommands.get(commandMap.get(spm));
+        } catch(NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
     }
 }

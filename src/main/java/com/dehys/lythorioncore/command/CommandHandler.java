@@ -1,5 +1,6 @@
 package com.dehys.lythorioncore.command;
 
+import com.dehys.lythorioncore.Main;
 import com.dehys.lythorioncore.factory.StorageFactory;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -7,6 +8,9 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -14,6 +18,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 public class CommandHandler extends ListenerAdapter implements Listener {
@@ -76,18 +81,33 @@ public class CommandHandler extends ListenerAdapter implements Listener {
 
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        GenericCommand command = getValidCommand(null, event.getMessage());
-        if (command == null) return;
+        String commandLabel = event.getMessage().split(" ")[0].replace("/", "");
+        Command bukkitCommand = Bukkit.getServer().getPluginCommand(commandLabel.toLowerCase());
+        if (bukkitCommand == null) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatColor.RED+ "Not a valid command.");
+            return;
+        }
 
-        command.execute(new CommandInformation(CommandCaller.MINECRAFT_PLAYER.setEventObject(event)));
+        GenericCommand genericCommand = getValidCommand(null, event.getMessage());
+        if (genericCommand != null) {
+            genericCommand.execute(new CommandInformation(CommandCaller.MINECRAFT_PLAYER.setEventObject(event)));
+        }
     }
 
     @EventHandler
     public void onServerCommandEvent(ServerCommandEvent event) {
-        GenericCommand command = getValidCommand(null, event.getCommand());
-        if (command == null) return;
+        Command bukkitCommand = Bukkit.getServer().getPluginCommand(event.getCommand());
+        if (bukkitCommand == null) {
+            event.setCancelled(true);
+            Main.getPlugin.getLogger().log(Level.WARNING, "Not a valid command.");
+            return;
+        }
 
-        command.execute(new CommandInformation(CommandCaller.MINECRAFT_CONSOLE.setEventObject(event)));
+        GenericCommand genericCommand = getValidCommand(null, event.getCommand());
+        if (genericCommand != null) {
+            genericCommand.execute(new CommandInformation(CommandCaller.MINECRAFT_CONSOLE.setEventObject(event)));
+        }
     }
 
     public Collection<Object> getPermissions(CommandCaller caller, GenericCommand command){

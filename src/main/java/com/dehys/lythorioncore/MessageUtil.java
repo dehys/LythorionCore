@@ -12,8 +12,9 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -44,37 +47,67 @@ public class MessageUtil {
     public static void sendMinecraftMessage(@NotNull Channel channel, @NotNull Player sender, @NotNull String message) {
         Main.getPlugin.getLogger().log(Level.INFO, "Player " + sender.getName() + " sent message: \"" + message + "\" in Channel " + channel.name());
 
+        ChatColor adminColor = ChatColor.of("#ff7e7e");
+        ChatColor modColor = ChatColor.of(Objects.requireNonNull(Objects.requireNonNull(Main.getBot.getGuild().getRoleById("668450515541164062")).getColor()));
+        ChatColor memberColor = ChatColor.of(Objects.requireNonNull(Objects.requireNonNull(Main.getBot.getGuild().getRoleById("922274967704449074")).getColor()));
+
         switch (channel) {
             case STAFF -> Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("lythorion.staffchat")).forEach(player ->
                     player.sendMessage("§7[§cStaff§7] " + sender.getDisplayName() + ": §f" + message));
 
-            case GLOBAL -> Bukkit.broadcastMessage(ChatColor.GRAY + sender.getDisplayName() + ": " + ChatColor.WHITE + message);
+            case GLOBAL -> {
+                String groupPrefix = switch (Objects.requireNonNull(getPlayerGroup(sender, List.of("admin", "mod", "default")))) {
+                    case "admin" -> adminColor+"[Admin] ";
+                    case "mod" -> modColor+"[Mod] ";
+                    case "default" -> memberColor+"[Member] ";
+                    default -> "";
+                };
+                Bukkit.broadcastMessage(groupPrefix + sender.getDisplayName() + ": " + ChatColor.WHITE + message);
+            }
         }
     }
 
+    private static String getPlayerGroup(Player player, Collection<String> possibleGroups) {
+        for (String group : possibleGroups) {
+            if (player.hasPermission("group." + group)) {
+                return group;
+            }
+        }
+        return null;
+    }
+
     public static void sendDiscordMessage(Channel channel, Message message) {
+        TextChannel globalChannel = Main.getBot.getChannel();
+        TextChannel logChannel = Main.getBot.getLogChannel();
+
         switch (channel) {
-            case GLOBAL -> StorageFactory.globalChannel.sendMessage(message).complete();
+            case GLOBAL -> globalChannel.sendMessage(message).complete();
             case STAFF -> {
-                if (StorageFactory.LOGGING_ENABLED) StorageFactory.logChannel.sendMessage(message).complete();
+                if (StorageFactory.LOGGING_ENABLED) logChannel.sendMessage(message).complete();
             }
         }
     }
 
     public static void sendDiscordMessage(Channel channel, MessageEmbed message) {
+        TextChannel globalChannel = Main.getBot.getChannel();
+        TextChannel logChannel = Main.getBot.getLogChannel();
+
         switch (channel) {
-            case GLOBAL -> StorageFactory.globalChannel.sendMessageEmbeds(message).complete();
+            case GLOBAL -> globalChannel.sendMessageEmbeds(message).complete();
             case STAFF -> {
-                if (StorageFactory.LOGGING_ENABLED) StorageFactory.logChannel.sendMessageEmbeds(message).complete();
+                if (StorageFactory.LOGGING_ENABLED) logChannel.sendMessageEmbeds(message).complete();
             }
         }
     }
 
     public static void sendDiscordMessage(Channel channel, String message) {
+        TextChannel globalChannel = Main.getBot.getChannel();
+        TextChannel logChannel = Main.getBot.getLogChannel();
+
         switch (channel) {
-            case GLOBAL -> StorageFactory.globalChannel.sendMessage(message).complete();
+            case GLOBAL -> globalChannel.sendMessage(message).complete();
             case STAFF -> {
-                if (StorageFactory.LOGGING_ENABLED) StorageFactory.logChannel.sendMessage(message).complete();
+                if (StorageFactory.LOGGING_ENABLED) logChannel.sendMessage(message).complete();
             }
         }
     }

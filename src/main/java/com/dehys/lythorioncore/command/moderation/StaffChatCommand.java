@@ -38,11 +38,7 @@ public class StaffChatCommand implements GenericCommand {
 
     @Override
     public @NotNull String getHelp(CommandCaller commandCaller) {
-        String help = """
-                Staff Chat Command
-                Usage: /staffchat <message> - Sends a message to the staff chat
-                Usage: /staffchat toggle - Toggles the staff chat
-                """;
+        String help = "/staffchat [<message> | toggle]";
         return commandCaller == CommandCaller.MINECRAFT_PLAYER ? help : GenericCommand.super.getHelp(commandCaller);
     }
 
@@ -51,12 +47,18 @@ public class StaffChatCommand implements GenericCommand {
         String command = event.getMessage().split(" ")[0];
         String[] args = event.getMessage().replaceFirst(command, "").split(" ");
 
-        if (args.length == 0) {
+        System.out.println("Displaying arguments of staffchat command\t");
+        for (int i = 0; i < args.length; i++) {
+            System.out.print("arg["+i+"]:\t'" +  args[i] + "'");
+        }
+        System.out.println("\t");
+
+        if (args.length == 1) {
             event.getPlayer().sendMessage(ChatColor.RED + this.getHelp(CommandCaller.MINECRAFT_PLAYER));
             return;
         }
 
-        if (args.length == 1 && args[0].equalsIgnoreCase("toggle")) {
+        if (args.length == 2 && args[1].equalsIgnoreCase("toggle")) {
             if (StorageFactory.staffChat.contains(event.getPlayer().getUniqueId())) {
                 StorageFactory.staffChat.remove(event.getPlayer().getUniqueId());
                 event.getPlayer().sendMessage("§aYou are now sending messages to the global chat.");

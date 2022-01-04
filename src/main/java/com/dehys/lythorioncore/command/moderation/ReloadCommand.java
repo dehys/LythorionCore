@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public class ReloadCommand implements GenericCommand {
 
     @Override
     public void execute(PlayerCommandPreprocessEvent event) {
-        event.getPlayer().sendMessage("&cReloading the server...");
+        event.getPlayer().sendMessage(ChatColor.RED + "Reloading the server...");
         reload();
     }
 
@@ -56,7 +57,7 @@ public class ReloadCommand implements GenericCommand {
     @Override
     public void execute(MessageReceivedEvent event) {
         if (event.isFromType(ChannelType.PRIVATE)) {
-            event.getChannel().sendMessage("This command cannot be used in public message channels.").complete();
+            event.getChannel().sendMessage("**[!]** This command cannot be used in private message channels.").complete();
             return;
         }
 

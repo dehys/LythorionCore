@@ -3,7 +3,6 @@ package com.dehys.lythorioncore;
 import com.dehys.lythorioncore.command.CommandHandler;
 import com.dehys.lythorioncore.factory.MessageFactory;
 import com.dehys.lythorioncore.factory.StorageFactory;
-import com.dehys.lythorioncore.feature.DescriptionUpdate;
 import net.dv8tion.jda.api.JDA;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,6 +13,7 @@ public final class Main extends JavaPlugin {
     public static Main getPlugin;
     public static Hook getHook;
     public static CommandHandler getCommandHandler;
+
 
     @Override
     public void onEnable() {
@@ -34,7 +34,8 @@ public final class Main extends JavaPlugin {
             getHook.hookCommands();
 
             //run features
-            DescriptionUpdate.run();
+            // Do not use this, blocks the server and bukkit watchdog service is not happy :)
+            //DescriptionUpdate.run();
 
             //send message to discord
             MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_GREEN, Channel.GLOBAL, null, MessageFactory.SERVER_START.getMessage());

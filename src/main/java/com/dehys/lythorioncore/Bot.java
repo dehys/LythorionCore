@@ -3,6 +3,8 @@ package com.dehys.lythorioncore;
 import com.dehys.lythorioncore.factory.StorageFactory;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
 
@@ -12,8 +14,11 @@ import java.util.logging.Level;
 
 public class Bot {
     private final String token;
-
     public static JDA jda = null;
+
+    private String guildID;
+    private String channelID;
+    private String logChannelID;
 
     public Bot(String token) {
         this.token = token;
@@ -32,13 +37,26 @@ public class Bot {
             e.printStackTrace();
         }
 
-        StorageFactory.guild = jda.getGuildById(StorageFactory.GUILD_ID);
-        if (StorageFactory.guild == null) {
-            Main.getPlugin.getLogger().log(Level.SEVERE, "Guild ID cannot be null! Please set it in the configuration.yml file and reload the server.");
+        this.guildID = StorageFactory.GUILD_ID;
+        this.channelID = StorageFactory.CHANNEL_ID;
+        this.logChannelID = StorageFactory.LOG_CHANNEL_ID;
+
+        if (getGuild() == null || getChannel() == null || getLogChannel() == null) {
+            Main.getPlugin.getLogger().log(Level.SEVERE, "Please check your configuration.yml file and make sure that the guildID, channelID and logChannelID is set correctly.");
             Main.unload();
         }
-        StorageFactory.globalChannel = StorageFactory.guild.getTextChannelById(StorageFactory.CHANNEL_ID);
-        StorageFactory.logChannel = StorageFactory.guild.getTextChannelById(StorageFactory.LOG_CHANNEL_ID);
+    }
+
+    public Guild getGuild(){
+        return jda.getGuildById(this.guildID);
+    }
+
+    public TextChannel getChannel(){
+        return jda.getTextChannelById(this.channelID);
+    }
+
+    public TextChannel getLogChannel(){
+        return jda.getTextChannelById(this.logChannelID);
     }
 
     private JDABuilder setupJDA(){

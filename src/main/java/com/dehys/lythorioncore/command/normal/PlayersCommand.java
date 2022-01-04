@@ -42,12 +42,10 @@ public class PlayersCommand implements GenericCommand {
 
     @Override
     public void execute(PlayerCommandPreprocessEvent event) {
-
     }
 
     @Override
     public void execute(ServerCommandEvent event) {
-
     }
 
     @Override

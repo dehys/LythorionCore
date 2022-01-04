@@ -120,11 +120,9 @@ public class ShowItemCommand implements GenericCommand {
                     player.spigot().sendMessage(ChatMessageType.CHAT, message);
                 }
 
-            } else {
-                System.out.println("[SI COMMAND] AMOUNT IS WRAUUNGGG");
             }
         } else {
-            System.out.println("[SI COMMAND] Item is null or AIR");
+            event.getPlayer().sendMessage(ChatColor.RED + "You must be holding an item to show off!");
         }
     }
 

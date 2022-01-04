@@ -1,8 +1,6 @@
 package com.dehys.lythorioncore.factory;
 
 import com.dehys.lythorioncore.object.claim.Region;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
@@ -16,11 +14,6 @@ public class StorageFactory {
 
     //staffchat
     public static ArrayList<UUID> staffChat = new ArrayList<>();
-
-    //discord
-    public static Guild guild;
-    public static TextChannel globalChannel;
-    public static TextChannel logChannel;
 
     //configuration files
     public static FileConfiguration configuration;
