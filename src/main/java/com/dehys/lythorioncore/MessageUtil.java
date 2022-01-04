@@ -59,8 +59,7 @@ public class MessageUtil {
                 String groupPrefix = switch (Objects.requireNonNull(getPlayerGroup(sender, List.of("admin", "mod", "default")))) {
                     case "admin" -> adminColor+"[Admin] ";
                     case "mod" -> modColor+"[Mod] ";
-                    case "default" -> memberColor+"[Member] ";
-                    default -> "";
+                    default -> memberColor+"[Member] ";
                 };
                 Bukkit.broadcastMessage(groupPrefix + sender.getDisplayName() + ": " + ChatColor.WHITE + message);
             }
