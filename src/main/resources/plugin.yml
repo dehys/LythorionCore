@@ -11,41 +11,57 @@ commands:
     usage: /reload
     description: Reloads the server
     aliases: [ rl ]
-    permission: lythorion.reload
+    permission: lythorion.command.reload
   restart:
     usage: /restart
     description: Restarts the server
     aliases: [ stop ]
-    permission: lythorion.restart
+    permission: lythorion.command.restart
   staffchat:
     usage: /staffchat [<message> / toggle]
     description: Send a message to the staffchat or toggle it
     aliases: [ sc, staff ]
-    permission: lythorion.staffchat
+    permission: lythorion.command.staffchat
   claim:
     usage: /claim <not implemented yet>
     description: Claim a chunk
-    permission: lythorion.claim
+    permission: lythorion.command.claim
   nick:
     usage: /nick <nickname>
     description: Change your nickname
     aliases: [ nickname ]
-    permission: lythorion.nick
+    permission: lythorion.command.nick
   showitem:
     usage: /showitem <item>
     description: Show your item in chat
     aliases: [ si ]
-    permission: lythorion.showitem
+    permission: lythorion.command.showitem
+  tag:
+    usage: /tag
+    description: Opens the tag menu
+    aliases: [ tags ]
+    permission: lythorion.command.tag
 permissions:
   lythorion.admin:
     description: Grants full access to the plugin's features
     children:
-      - lythorion.nick
-      - lythorion.showitem
-      - lythorion.staffchat
-  lythorion.nick:
+      - lythorion.command.reload
+      - lythorion.command.restart
+      - lythorion.command.staffchat
+      - lythorion.command.claim
+      - lythorion.command.nick
+      - lythorion.command.showitem
+  lythorion.command.reload:
+    description: Allows the user to reload the server
+  lythorion.command.restart:
+    description: Allows the user to restart the server
+  lythorion.command.staffchat:
+    description: Allows the user to send a message to the staffchat
+  lythorion.command.claim:
+    description: Allows the user to claim a area
+  lythorion.command.nick:
     description: Allows the player to change their nickname
-  lythorion.showitem:
+  lythorion.command.showitem:
     description: Allows the player to show items in chat
-  lythorion.staffchat:
-    description: Allows the player to send messages to the staffchat
+  lythorion.command.tag:
+    description: Allows the player to open the tag menu

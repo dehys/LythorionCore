@@ -1,0 +1,13 @@
+#List of all tags
+#Format: name:description:prefix:suffix:weight:isStaticTag:permission
+#
+#Example: Admin:this is the default admin group tag:&c[Admin] &b:&r:0:true:group.admin
+#Result: &c[Admin] &b<player_name>&r: <message> - you can see it here: <link>
+
+tags:
+  - 'Admin:Admin role tag:&c[Admin] :&r:0:true:group.admin'
+  - 'Developer:Developer role tag:&9[Developer] ::1:true:group.developer'
+  - 'Moderator:Moderator role tag:&a[Mod] ::2:true:group.mod'
+  - 'Member:The default role tag:::3:true:group.default'
+  - 'Funny:Funny role tag:&8[&bF&eu&an&dn&cy&8] &7::4:false:lythorion.tag.funny'
+players: []

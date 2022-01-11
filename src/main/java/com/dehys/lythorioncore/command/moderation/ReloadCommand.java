@@ -23,7 +23,7 @@ import java.util.logging.Level;
 public class ReloadCommand implements GenericCommand {
 
     public ReloadCommand() {
-        Main.getCommandHandler.addCommand(this);
+        Main.commandHandler.addCommand(this);
     }
 
     @Override
@@ -79,10 +79,10 @@ public class ReloadCommand implements GenericCommand {
     }
 
     private void reload() {
-        Main.getPlugin.getLogger().log(Level.SEVERE, "Reloading the server...");
+        Main.plugin.getLogger().log(Level.SEVERE, "Reloading the server...");
         MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_BLUE, Channel.GLOBAL, null, "Reloading server...");
-        Main.getBot.shutdown();
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getPlugin, new ReloadRunnable());
+        Main.bot.shutdown();
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.plugin, new ReloadRunnable());
     }
 
     private static class ReloadRunnable implements Runnable {

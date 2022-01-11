@@ -1,7 +1,9 @@
 package com.dehys.lythorioncore.factory;
 
 import com.dehys.lythorioncore.object.claim.Region;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.dehys.lythorioncore.object.storage.Storage;
+import com.dehys.lythorioncore.object.tag.Tag;
+import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +14,18 @@ public class StorageFactory {
     //claims
     public static List<Region> regions = new ArrayList<>();
 
+    //tags
+    public static List<Tag> tags = new ArrayList<>();
+    public static List<Team> teams = new ArrayList<>();
+
     //staffchat
     public static ArrayList<UUID> staffChat = new ArrayList<>();
 
-    //configuration files
-    public static FileConfiguration configuration;
-    public static FileConfiguration claims;
+    public static Storage discordStorage;
+    public static Storage claimsStorage;
+    public static Storage tagsStorage;
 
-    //Configuration.txt
+    //discord.yml
     public static String BOT_TOKEN;
     public static String GUILD_ID;
     public static String CHANNEL_ID;
@@ -29,6 +35,4 @@ public class StorageFactory {
     public static String LOG_WEBHOOK_URL;
     public static String DISCORD_PREFIX;
     public static String AVATAR_PROVIDER_URL;
-
-
 }

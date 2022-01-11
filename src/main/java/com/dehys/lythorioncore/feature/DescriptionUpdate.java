@@ -7,10 +7,10 @@ import org.bukkit.Bukkit;
 public class DescriptionUpdate {
 
     public static void run() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getPlugin, () -> {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, () -> {
             int playerCount = Bukkit.getServer().getOnlinePlayers().size();
             int maxPlayers = Bukkit.getServer().getMaxPlayers();
-            TextChannel channel = Main.getBot.getChannel();
+            TextChannel channel = Main.bot.getChannel();
             channel.getManager().setTopic("\uD83D\uDD17 play.lythorion.com | \uD83D\uDC65 " + playerCount + "/" + maxPlayers).complete();
         }, 0, 15 * 20);
     }

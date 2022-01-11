@@ -25,7 +25,7 @@ import java.util.Set;
 public class RestartCommand implements GenericCommand {
 
     public RestartCommand() {
-        Main.getCommandHandler.addCommand(this);
+        Main.commandHandler.addCommand(this);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class RestartCommand implements GenericCommand {
         } else {
             int seconds = (int) secondsOption.getAsDouble();
             event.getHook().sendMessage("Server will restart in **" + seconds + "** seconds").setEphemeral(true).complete();
-            Bukkit.getScheduler().runTaskLater(Main.getPlugin, this::restart, seconds * 20L);
+            Bukkit.getScheduler().runTaskLater(Main.plugin, this::restart, seconds * 20L);
         }
     }
 
@@ -94,8 +94,8 @@ public class RestartCommand implements GenericCommand {
     private void restart() {
         Bukkit.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(ChatColor.RED + "Server restarting"));
         MessageUtil.sendDiscordEmbed(MessageUtil.EmbedStyle.COLOR_BLUE, Channel.GLOBAL, null, "Restarting Server...");
-        Main.getBot.shutdown();
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getPlugin, new RestartRunnable());
+        Main.bot.shutdown();
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.plugin, new RestartRunnable());
     }
 
     private static class RestartRunnable implements Runnable {

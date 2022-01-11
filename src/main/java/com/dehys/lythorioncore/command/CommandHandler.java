@@ -100,7 +100,7 @@ public class CommandHandler extends ListenerAdapter implements Listener {
         Command bukkitCommand = Bukkit.getServer().getPluginCommand(event.getCommand());
         if (bukkitCommand == null) {
             event.setCancelled(true);
-            Main.getPlugin.getLogger().log(Level.WARNING, "Not a valid command.");
+            Main.plugin.getLogger().log(Level.WARNING, "Not a valid command.");
             return;
         }
 

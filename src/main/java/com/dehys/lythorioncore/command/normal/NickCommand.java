@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class NickCommand implements GenericCommand {
 
     public NickCommand() {
-        Main.getCommandHandler.addCommand(this);
+        Main.commandHandler.addCommand(this);
     }
 
     @Override
@@ -78,18 +78,5 @@ public class NickCommand implements GenericCommand {
             String nick = nameOption.getAsString();
             event.getHook().sendMessage("Changed your nickname to **" + nick + "**").setEphemeral(true).complete();
         }
-    }
-
-    private static final Pattern HEX_PATTERN = Pattern.compile("&(#\\w{6})");
-
-    public static String colorize(String message) {
-        Matcher matcher = HEX_PATTERN.matcher(ChatColor.translateAlternateColorCodes('&', message));
-        StringBuilder buffer = new StringBuilder();
-
-        while (matcher.find()) {
-            matcher.appendReplacement(buffer, ChatColor.of(matcher.group(1)).toString());
-        }
-
-        return matcher.appendTail(buffer).toString();
     }
 }

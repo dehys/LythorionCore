@@ -30,7 +30,7 @@ public class Bot {
             jda = setupJDA().build();
             jda.awaitReady();
         } catch (LoginException e) {
-            Main.getPlugin.getLogger().log(Level.SEVERE, "Bot token cannot be null! Please set it in the configuration.yml file and reload the server.");
+            Main.plugin.getLogger().log(Level.SEVERE, "Bot token cannot be null! Please set it in the discord.yml file and reload the server.");
             Main.unload();
             return;
         } catch (InterruptedException e) {
@@ -42,7 +42,7 @@ public class Bot {
         this.logChannelID = StorageFactory.LOG_CHANNEL_ID;
 
         if (getGuild() == null || getChannel() == null || getLogChannel() == null) {
-            Main.getPlugin.getLogger().log(Level.SEVERE, "Please check your configuration.yml file and make sure that the guildID, channelID and logChannelID is set correctly.");
+            Main.plugin.getLogger().log(Level.SEVERE, "Please check your discord.yml file and make sure that the guildID, channelID and logChannelID is set correctly.");
             Main.unload();
         }
     }

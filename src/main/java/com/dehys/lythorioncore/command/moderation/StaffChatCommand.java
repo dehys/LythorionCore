@@ -20,7 +20,7 @@ import java.util.Set;
 public class StaffChatCommand implements GenericCommand {
 
     public StaffChatCommand() {
-        Main.getCommandHandler.addCommand(this);
+        Main.commandHandler.addCommand(this);
     }
 
     @Override

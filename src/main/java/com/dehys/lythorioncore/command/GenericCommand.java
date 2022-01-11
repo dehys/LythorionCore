@@ -31,7 +31,7 @@ public interface GenericCommand {
 
     @NotNull
     default CommandHandler getManager() {
-        return Main.getCommandHandler;
+        return Main.commandHandler;
     }
 
     @NotNull

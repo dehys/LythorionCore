@@ -25,7 +25,7 @@ import java.util.*;
 public class ShowItemCommand implements GenericCommand {
 
     public ShowItemCommand() {
-        Main.getCommandHandler.addCommand(this);
+        Main.commandHandler.addCommand(this);
     }
 
     @Override

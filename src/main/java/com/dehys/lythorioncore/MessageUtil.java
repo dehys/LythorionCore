@@ -1,12 +1,12 @@
 package com.dehys.lythorioncore;
 
-import com.dehys.lythorioncore.command.normal.NickCommand;
 import com.dehys.lythorioncore.command.normal.ShowItemCommand;
 import com.dehys.lythorioncore.factory.StorageFactory;
 import com.dehys.lythorioncore.listener.bukkit.PlayerAdvanceListener;
 import com.dehys.lythorioncore.listener.bukkit.PlayerDeathListener;
 import com.dehys.lythorioncore.listener.bukkit.PlayerJoinListener;
 import com.dehys.lythorioncore.listener.bukkit.PlayerLeaveListener;
+import com.dehys.lythorioncore.object.tag.TagManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -27,9 +27,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MessageUtil {
 
@@ -37,31 +38,24 @@ public class MessageUtil {
         String hexColor = "&#" + Integer.toHexString(Objects.requireNonNull(member.getColor()).getRGB()).substring(2);
 
         switch (channel) {
-            case STAFF -> Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("lythorion.staffchat")).forEach(player ->
+            case STAFF -> Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("lythorion.command.staffchat")).forEach(player ->
                     player.sendMessage("§7[§cStaff§7] " + member.getEffectiveName() + ": §f" + message));
 
-            case GLOBAL -> Main.getPlugin.getServer().broadcastMessage(ChatColor.BLUE + "[D] " + NickCommand.colorize(hexColor) + member.getEffectiveName() + ": " + ChatColor.WHITE + message);
+            case GLOBAL -> Main.plugin.getServer().broadcastMessage(ChatColor.BLUE + "[D] " + colorize(hexColor) + member.getEffectiveName() + ": " + ChatColor.WHITE + message);
         }
     }
 
     public static void sendMinecraftMessage(@NotNull Channel channel, @NotNull Player sender, @NotNull String message) {
-        Main.getPlugin.getLogger().log(Level.INFO, "Player " + sender.getName() + " sent message: \"" + message + "\" in Channel " + channel.name());
+        Main.plugin.getLogger().log(Level.INFO, "Player " + sender.getName() + " sent message: \"" + message + "\" in Channel " + channel.name());
 
-        ChatColor adminColor = ChatColor.of("#ff7e7e");
-        ChatColor modColor = ChatColor.of(Objects.requireNonNull(Objects.requireNonNull(Main.getBot.getGuild().getRoleById("668450515541164062")).getColor()));
-        ChatColor memberColor = ChatColor.of(Objects.requireNonNull(Objects.requireNonNull(Main.getBot.getGuild().getRoleById("922274967704449074")).getColor()));
+        String name = TagManager.getNameOfPlayer(sender);
 
         switch (channel) {
-            case STAFF -> Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("lythorion.staffchat")).forEach(player ->
-                    player.sendMessage("§7[§cStaff§7] " + sender.getDisplayName() + ": §f" + message));
+            case STAFF -> Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("lythorion.command.staffchat")).forEach(player ->
+                    player.sendMessage("§7[§cSC§7] " + colorize(name) + ": §f" + message));
 
             case GLOBAL -> {
-                String groupPrefix = switch (Objects.requireNonNull(getPlayerGroup(sender, List.of("admin", "mod", "default")))) {
-                    case "admin" -> adminColor+"[Admin] ";
-                    case "mod" -> modColor+"[Mod] ";
-                    default -> memberColor+"[Member] ";
-                };
-                Bukkit.broadcastMessage(groupPrefix + sender.getDisplayName() + ": " + ChatColor.WHITE + message);
+                Bukkit.broadcastMessage(colorize(name) + ": " + ChatColor.WHITE + message);
             }
         }
     }
@@ -76,8 +70,8 @@ public class MessageUtil {
     }
 
     public static void sendDiscordMessage(Channel channel, Message message) {
-        TextChannel globalChannel = Main.getBot.getChannel();
-        TextChannel logChannel = Main.getBot.getLogChannel();
+        TextChannel globalChannel = Main.bot.getChannel();
+        TextChannel logChannel = Main.bot.getLogChannel();
 
         switch (channel) {
             case GLOBAL -> globalChannel.sendMessage(message).complete();
@@ -88,8 +82,8 @@ public class MessageUtil {
     }
 
     public static void sendDiscordMessage(Channel channel, MessageEmbed message) {
-        TextChannel globalChannel = Main.getBot.getChannel();
-        TextChannel logChannel = Main.getBot.getLogChannel();
+        TextChannel globalChannel = Main.bot.getChannel();
+        TextChannel logChannel = Main.bot.getLogChannel();
 
         switch (channel) {
             case GLOBAL -> globalChannel.sendMessageEmbeds(message).complete();
@@ -100,8 +94,8 @@ public class MessageUtil {
     }
 
     public static void sendDiscordMessage(Channel channel, String message) {
-        TextChannel globalChannel = Main.getBot.getChannel();
-        TextChannel logChannel = Main.getBot.getLogChannel();
+        TextChannel globalChannel = Main.bot.getChannel();
+        TextChannel logChannel = Main.bot.getLogChannel();
 
         switch (channel) {
             case GLOBAL -> globalChannel.sendMessage(message).complete();
@@ -112,7 +106,7 @@ public class MessageUtil {
     }
 
     public static void sendDiscordWebhook(Channel channel, String username, String content, String avatar_url) {
-        Main.getPlugin.getLogger().log(Level.INFO, "Player " + username + " sent message: \"" + content + "\" in Channel " + channel.name());
+        Main.plugin.getLogger().log(Level.INFO, "Player " + username + " sent message: \"" + content + "\" in Channel " + channel.name());
 
         String url;
         if (channel == Channel.GLOBAL) {
@@ -211,6 +205,19 @@ public class MessageUtil {
                                         advancement.getKey().toString().startsWith("minecraft:adventure") ? "minecraft:adventure/" :
                                                 advancement.getKey().toString().startsWith("minecraft:husbandry") ? "minecraft:husbandry/" :
                                                         "", "").replaceAll("_", " ");
+    }
+
+    private static final Pattern HEX_PATTERN = Pattern.compile("&(#\\w{6})");
+
+    public static String colorize(String message) {
+        Matcher matcher = HEX_PATTERN.matcher(ChatColor.translateAlternateColorCodes('&', message));
+        StringBuilder buffer = new StringBuilder();
+
+        while (matcher.find()) {
+            matcher.appendReplacement(buffer, ChatColor.of(matcher.group(1)).toString());
+        }
+
+        return matcher.appendTail(buffer).toString();
     }
 
     public enum EmbedStyle {
