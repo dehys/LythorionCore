@@ -1,4 +1,4 @@
-package com.dehys.lythorioncore;
+package com.dehys.lythorioncore.core;
 
 import com.dehys.lythorioncore.factory.StorageFactory;
 import net.dv8tion.jda.api.JDA;

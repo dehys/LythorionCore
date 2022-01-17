@@ -1,4 +1,4 @@
-package com.dehys.lythorioncore;
+package com.dehys.lythorioncore.core;
 
 import com.dehys.lythorioncore.command.normal.ShowItemCommand;
 import com.dehys.lythorioncore.factory.StorageFactory;

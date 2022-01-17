@@ -6,7 +6,7 @@
 
     <groupId>com.dehys</groupId>
     <artifactId>lythorioncore</artifactId>
-    <version>1.4.5</version>
+    <version>1.5.1</version>
     <packaging>jar</packaging>
 
     <name>LythorionCore</name>
@@ -68,10 +68,6 @@
             <name>jcenter-bintray</name>
             <url>https://jcenter.bintray.com</url>
         </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -82,10 +78,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.DV8FromTheWorld</groupId>
+            <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.3</version>
-            <scope>compile</scope>
+            <version>5.0.0-alpha.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>club.minnced</groupId>
+                    <artifactId>opus-java</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

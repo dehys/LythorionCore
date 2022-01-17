@@ -1,6 +1,6 @@
 package com.dehys.lythorioncore.command;
 
-import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.core.Main;
 import com.dehys.lythorioncore.factory.StorageFactory;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
@@ -52,7 +52,7 @@ public class CommandHandler extends ListenerAdapter implements Listener {
 
         //Check permissions
         if (event.isFromType(ChannelType.TEXT)) {
-            if (!this.getPermissions(CommandCaller.DISCORD_TEXT, command).stream().allMatch(p -> Objects.requireNonNull(event.getMember()).hasPermission((Permission) p))) {
+            if (!command.getRequiredDiscordPermissions().stream().allMatch(p -> Objects.requireNonNull(event.getMember()).hasPermission(p))) {
                 event.getChannel().sendMessage("You do not have permission to use this command.").complete();
                 return;
             }
@@ -70,7 +70,7 @@ public class CommandHandler extends ListenerAdapter implements Listener {
         if (command == null) return;
 
         if (event.getChannelType() == ChannelType.TEXT) {
-            if (!this.getPermissions(CommandCaller.DISCORD_SLASH, command).stream().allMatch(p -> Objects.requireNonNull(event.getMember()).hasPermission((Permission) p))) {
+            if (!command.getRequiredDiscordPermissions().stream().allMatch(p -> Objects.requireNonNull(event.getMember()).hasPermission(p))) {
                 event.getChannel().sendMessage("You do not have permission to use this command.").complete();
                 return;
             }
@@ -108,27 +108,6 @@ public class CommandHandler extends ListenerAdapter implements Listener {
         if (genericCommand != null) {
             genericCommand.execute(new CommandInformation(CommandCaller.MINECRAFT_CONSOLE.setEventObject(event)));
         }
-    }
-
-    public Collection<Object> getPermissions(CommandCaller caller, GenericCommand command){
-        Collection<Object> requiredPermissions = new ArrayList<>();
-        if (caller == CommandCaller.DISCORD_TEXT || caller == CommandCaller.DISCORD_SLASH) {
-            for (GenericPermission p : command.getRequiredPermissions()) {
-                if (!p.isBukkit()){
-                    requiredPermissions.add(GenericPermission.getAsDiscordPermission(p));
-                }
-            }
-            return requiredPermissions;
-        }else if (caller == CommandCaller.MINECRAFT_PLAYER || caller == CommandCaller.MINECRAFT_CONSOLE) {
-            for (GenericPermission p : command.getRequiredPermissions()) {
-                if (p.isBukkit()){
-                    requiredPermissions.add(GenericPermission.getAsBukkitPermission(p));
-                }
-            }
-        }else {
-            return null;
-        }
-        return requiredPermissions;
     }
 
     public GenericCommand getValidCommand(User user, String s) {

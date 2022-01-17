@@ -1,6 +1,6 @@
 package com.dehys.lythorioncore.feature;
 
-import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.core.Main;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.bukkit.Bukkit;
 

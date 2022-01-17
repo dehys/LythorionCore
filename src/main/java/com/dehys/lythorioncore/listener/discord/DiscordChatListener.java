@@ -1,8 +1,8 @@
 package com.dehys.lythorioncore.listener.discord;
 
-import com.dehys.lythorioncore.Bot;
-import com.dehys.lythorioncore.Channel;
-import com.dehys.lythorioncore.MessageUtil;
+import com.dehys.lythorioncore.core.Bot;
+import com.dehys.lythorioncore.core.Channel;
+import com.dehys.lythorioncore.core.MessageUtil;
 import com.dehys.lythorioncore.factory.StorageFactory;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

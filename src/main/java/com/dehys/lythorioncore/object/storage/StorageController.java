@@ -1,14 +1,11 @@
 package com.dehys.lythorioncore.object.storage;
 
-import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.core.Main;
 import com.dehys.lythorioncore.factory.StorageFactory;
-import com.dehys.lythorioncore.object.tag.Tag;
 import com.dehys.lythorioncore.object.tag.TagManager;
 import com.google.gson.Gson;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scoreboard.Team;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 

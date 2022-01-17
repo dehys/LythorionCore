@@ -1,6 +1,6 @@
 package com.dehys.lythorioncore.command.normal;
 
-import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.core.Main;
 import com.dehys.lythorioncore.command.CommandCaller;
 import com.dehys.lythorioncore.command.GenericCommand;
 import com.dehys.lythorioncore.object.tag.TagManager;

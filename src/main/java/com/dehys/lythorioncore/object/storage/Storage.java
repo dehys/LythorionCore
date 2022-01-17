@@ -1,7 +1,6 @@
 package com.dehys.lythorioncore.object.storage;
 
-import com.dehys.lythorioncore.Main;
-import com.dehys.lythorioncore.factory.StorageFactory;
+import com.dehys.lythorioncore.core.Main;
 import com.google.gson.Gson;
 import org.bukkit.configuration.file.FileConfiguration;
 

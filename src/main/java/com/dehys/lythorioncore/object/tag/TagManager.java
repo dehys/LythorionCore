@@ -1,6 +1,6 @@
 package com.dehys.lythorioncore.object.tag;
 
-import com.dehys.lythorioncore.MessageUtil;
+import com.dehys.lythorioncore.core.MessageUtil;
 import com.dehys.lythorioncore.factory.StorageFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

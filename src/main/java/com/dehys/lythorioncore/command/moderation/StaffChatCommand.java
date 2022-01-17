@@ -1,8 +1,8 @@
 package com.dehys.lythorioncore.command.moderation;
 
-import com.dehys.lythorioncore.Channel;
-import com.dehys.lythorioncore.Main;
-import com.dehys.lythorioncore.MessageUtil;
+import com.dehys.lythorioncore.core.Channel;
+import com.dehys.lythorioncore.core.Main;
+import com.dehys.lythorioncore.core.MessageUtil;
 import com.dehys.lythorioncore.command.CommandCaller;
 import com.dehys.lythorioncore.command.GenericCommand;
 import com.dehys.lythorioncore.factory.StorageFactory;

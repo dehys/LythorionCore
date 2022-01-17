@@ -1,6 +1,6 @@
 package com.dehys.lythorioncore.listener.bukkit;
 
-import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.core.Main;
 import com.dehys.lythorioncore.object.tag.TagManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;

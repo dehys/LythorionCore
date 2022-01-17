@@ -1,6 +1,6 @@
 name: LythorionCore
 version: '${project.version}'
-main: com.dehys.lythorioncore.Main
+main: com.dehys.lythorioncore.core.Main
 api-version: 1.18
 prefix: Lythorion
 authors: [ dehys ]

@@ -1,10 +1,12 @@
 package com.dehys.lythorioncore.command;
 
-import com.dehys.lythorioncore.Main;
+import com.dehys.lythorioncore.core.Main;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.jetbrains.annotations.NotNull;
@@ -61,9 +63,9 @@ public interface GenericCommand {
 
     void execute(SlashCommandEvent event);
 
-    default Collection<GenericPermission> getRequiredPermissions() {
-        Set<GenericPermission> permissions = new HashSet<>();
-        permissions.add(GenericPermission.getFromName(Objects.requireNonNull(Bukkit.getServer().getPluginCommand(getName())).getPermission()));
+    default Collection<Permission> getRequiredDiscordPermissions() {
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(Permission.MESSAGE_SEND);
         return permissions;
     }
 }

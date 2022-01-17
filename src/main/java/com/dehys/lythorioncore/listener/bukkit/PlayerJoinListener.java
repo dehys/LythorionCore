@@ -1,7 +1,7 @@
 package com.dehys.lythorioncore.listener.bukkit;
 
-import com.dehys.lythorioncore.Channel;
-import com.dehys.lythorioncore.MessageUtil;
+import com.dehys.lythorioncore.core.Channel;
+import com.dehys.lythorioncore.core.MessageUtil;
 import com.dehys.lythorioncore.object.tag.TagManager;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;

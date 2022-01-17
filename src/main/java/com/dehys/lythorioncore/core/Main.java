@@ -1,11 +1,8 @@
-package com.dehys.lythorioncore;
+package com.dehys.lythorioncore.core;
 
 import com.dehys.lythorioncore.command.CommandHandler;
 import com.dehys.lythorioncore.factory.MessageFactory;
 import com.dehys.lythorioncore.factory.StorageFactory;
-import com.dehys.lythorioncore.object.storage.Storage;
-import com.dehys.lythorioncore.object.storage.StorageController;
-import com.dehys.lythorioncore.object.tag.TagManager;
 import net.dv8tion.jda.api.JDA;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;

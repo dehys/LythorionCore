@@ -1,11 +1,11 @@
 package com.dehys.lythorioncore.command.moderation;
 
-import com.dehys.lythorioncore.Channel;
-import com.dehys.lythorioncore.Main;
-import com.dehys.lythorioncore.MessageUtil;
+import com.dehys.lythorioncore.core.Channel;
+import com.dehys.lythorioncore.core.Main;
+import com.dehys.lythorioncore.core.MessageUtil;
 import com.dehys.lythorioncore.command.CommandCaller;
 import com.dehys.lythorioncore.command.GenericCommand;
-import com.dehys.lythorioncore.command.GenericPermission;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -85,9 +85,9 @@ public class RestartCommand implements GenericCommand {
     }
 
     @Override
-    public Collection<GenericPermission> getRequiredPermissions() {
-        Collection<GenericPermission> permissions = GenericCommand.super.getRequiredPermissions();
-        permissions.add(GenericPermission.ADMINISTRATOR);
+    public Collection<Permission> getRequiredDiscordPermissions() {
+        Collection<Permission> permissions = GenericCommand.super.getRequiredDiscordPermissions();
+        permissions.add(Permission.ADMINISTRATOR);
         return permissions;
     }
 

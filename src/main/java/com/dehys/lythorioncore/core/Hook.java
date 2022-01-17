@@ -1,6 +1,5 @@
-package com.dehys.lythorioncore;
+package com.dehys.lythorioncore.core;
 
-import com.dehys.lythorioncore.command.EmptyCommandExecutor;
 import com.dehys.lythorioncore.command.GenericCommand;
 import com.dehys.lythorioncore.command.moderation.ReloadCommand;
 import com.dehys.lythorioncore.command.moderation.RestartCommand;
@@ -11,9 +10,7 @@ import com.dehys.lythorioncore.listener.bukkit.*;
 import com.dehys.lythorioncore.listener.discord.DiscordChatListener;
 import com.dehys.lythorioncore.object.storage.Storage;
 import com.dehys.lythorioncore.object.storage.StorageController;
-import com.dehys.lythorioncore.object.tag.Tag;
 import net.dv8tion.jda.api.entities.Guild;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
